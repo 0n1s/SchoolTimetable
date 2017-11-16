@@ -34,9 +34,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     private Context context;
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_class, parent,false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_class, parent,false);
         return new ViewHolder(v);
     }
     String day;
@@ -134,6 +134,53 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         holder.unit_name.setText(dataClass.getUnit_name());
         holder.startTime.setText(dataClass.getStart_time());
         holder.room_number.setText(dataClass.getRoomnumber());
+
+
+
+
+
+        int ent_time=Integer.parseInt(dataClass.getEnd_time())-Integer.parseInt(dataClass.getStart_time());
+
+       //Toast.makeText(context, String.valueOf(ent_time), Toast.LENGTH_SHORT).show();
+        if(ent_time==1)
+        {
+            final float scale = context.getResources().getDisplayMetrics().density;
+
+            int pixels = (int) (74 * scale *1);
+            holder.linear_layout.getLayoutParams().height = pixels;
+
+        }
+        else if(ent_time==2)
+        {
+            final float scale = context.getResources().getDisplayMetrics().density;
+
+            int pixels = (int) (74 * scale *2);
+            holder.linear_layout.getLayoutParams().height = pixels;
+        }
+        else if(ent_time==3)
+        {
+            final float scale = context.getResources().getDisplayMetrics().density;
+
+            int pixels = (int) (74 * scale *3);
+            holder.linear_layout.getLayoutParams().height = pixels;
+        }
+
+        else if(ent_time==4)
+        {
+            final float scale = context.getResources().getDisplayMetrics().density;
+
+            int pixels = (int) (74 * scale *4);
+            holder.linear_layout.getLayoutParams().height = pixels;
+        }
+        else if(ent_time>4)
+        {
+            final float scale = context.getResources().getDisplayMetrics().density;
+
+            int pixels = (int) (74 * scale *5);
+            holder.linear_layout.getLayoutParams().height = pixels;
+        }
+
+
 
 
     }

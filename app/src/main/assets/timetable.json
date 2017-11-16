@@ -148,7 +148,7 @@
     "place": "Room 215",
     "day": 5,
     "course": "Computer Science and IT",
-    "startTime": 8,
+    "startTime": 7,
     "endTime": 10
   },
   {
@@ -159,7 +159,7 @@
     "day": 5,
     "course": "Computer Science and IT",
     "startTime": 10,
-    "endTime": 12
+    "endTime": 11
   },
   {
     "id": 15,
@@ -168,7 +168,15 @@
     "place": "Room 12",
     "day": 5,
     "course": "Computer Science and IT",
-    "startTime":12 ,
-    "endTime": 17
-  }
+    "startTime":11 ,
+    "endTime": 12},
+  {
+    "id": 16,
+    "name": "Computer Security and cryptography",
+    "prof": "Naivasha",
+    "place": "Room 12",
+    "day": 5,
+    "course": "Computer Science and IT",
+    "startTime":13 ,
+    "endTime": 19}
 ]
