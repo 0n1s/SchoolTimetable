@@ -58,9 +58,8 @@ public class NotifyService extends Service {
 
 
 
-        Toast.makeText(this, "Service oncreate", Toast.LENGTH_SHORT).show();
-        playBeep();
-
+//        Toast.makeText(this, "Service oncreate", Toast.LENGTH_SHORT).show();
+//        playBeep();
 
 
 
@@ -69,7 +68,7 @@ public class NotifyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Service onstart", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, "Service onstart", Toast.LENGTH_SHORT).show();
         return mStartMode;
 
     }
@@ -77,7 +76,7 @@ public class NotifyService extends Service {
     /** A client is binding to the service with bindService() */
     @Override
     public IBinder onBind(Intent intent) {
-        Toast.makeText(this, "on bindviewholder", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "on bindviewholder", Toast.LENGTH_SHORT).show();
         return mBinder;
     }
 

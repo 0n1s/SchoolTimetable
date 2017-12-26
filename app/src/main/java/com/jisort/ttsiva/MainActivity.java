@@ -1,8 +1,11 @@
 package com.jisort.ttsiva;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -47,6 +50,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.jisort.ttsiva.InitialActivity.batch_name;
+import static com.jisort.ttsiva.InitialActivity.dept;
+import static com.jisort.ttsiva.URLs.timetable_data;
+
 public class MainActivity extends AppCompatActivity
 {
 
@@ -64,7 +71,6 @@ public class MainActivity extends AppCompatActivity
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    public static String timetable_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +80,15 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setSubtitle("For "+batch_name + " department code " + dept );
         //get json file from assets folder
+
 
         try
         {
-            timetable_data =readJSONFromAsset();
+            //timetable_data =readJSONFromAsset();
 
-
+Log.d("timetable", timetable_data);
 
         }  catch (Exception e) {
             e.printStackTrace();
@@ -90,7 +98,6 @@ public class MainActivity extends AppCompatActivity
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2;
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -103,6 +110,15 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+
+
+/*
+$batch_name = '4.2';
+$dept= 'CS101';
+ */
+
+
 
     public String readJSONFromAsset()
     {
@@ -247,10 +263,6 @@ public class MainActivity extends AppCompatActivity
                 Log.d("day",day_sent);
 
 
-
-
-
-
             recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);//done here
             layoutManager = new GridLayoutManager(mContext, 1);
             recyclerView.setLayoutManager(layoutManager);
@@ -342,7 +354,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
             } catch (JSONException e) {
-
+              Log.d("json erro", String.valueOf(e));
             }
 
             return rootView;

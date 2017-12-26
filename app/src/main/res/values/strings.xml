@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Timetable</string>
-    <string name="tab_text_1">MONDAY</string>
-    <string name="tab_text_2">TUESDAY</string>
-    <string name="tab_text_3">WEDNESDAY</string>
-    <string name="tab_text_4">THUSRSDAY</string>
-    <string name="tab_text_5">FRIDAY</string>
+    <string name="tab_text_1">MON</string>
+    <string name="tab_text_2">TUE</string>
+    <string name="tab_text_3">WED</string>
+    <string name="tab_text_4">THUR</string>
+    <string name="tab_text_5">FRI</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>
