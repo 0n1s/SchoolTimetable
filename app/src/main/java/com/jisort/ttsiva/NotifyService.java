@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -64,6 +65,7 @@ public class NotifyService extends Service {
     {
 
 
+        Log.d("Worker ser", "servie on create");
         showForegroundNotification("You have a class in 30 minute's time. Please check your schedule.");
 
 
@@ -102,7 +104,8 @@ public class NotifyService extends Service {
     private void showForegroundNotification(String contentText)
     {
 
-
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(1000);
 
 
         String CHANNEL_ID = "my_channel_01";

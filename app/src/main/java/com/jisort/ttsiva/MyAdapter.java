@@ -88,20 +88,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 
 
 
-
-
-
-
-
-
-
-
-
         holder.linear_layout.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+
+                Calendar initial = Calendar.getInstance();
+                int month = initial.MONTH;
+                int year=  initial.YEAR;
+                int date = initial.DAY_OF_MONTH;
+
+                alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(context, AlarmReceiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, initial.getTimeInMillis(), 1*60*1000, pendingIntent);
+
+                Log.d("TAG_", "month is" + String.valueOf(month));
+                Log.d("TAG_", "year is" + String.valueOf(year));
+                Log.d("TAG_", "date is" + String.valueOf(date));
+
+
+
                 Boolean isset= false;
 
                 String alarms= pref.getString("alarms", "[]");
@@ -113,12 +121,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                         String unit_name = jsonObject.getString("unit_name");
                         String hour = jsonObject.getString("hour");
                         String day = jsonObject.getString("day");
+                        String time = jsonObject.getString("time");
                         String minute = jsonObject.getString("minute");
                         alarmid= jsonObject.getString("alarm_id");
-                        if(unit_name.equals(dataClass.getUnit_name())&& day.equals(dataClass.getDay()))
+                        if(unit_name.equals(dataClass.getUnit_name())&& day.equals(dataClass.getDay())&&time.equals(dataClass.getStart_time()))
                         {
                             isset=true;
-
                             Log.d("TAG_unit_name ->", unit_name);
                             Log.d("TAG_day ->", day);
                         }
@@ -193,34 +201,49 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                             Intent intent = new Intent(context, NotifyService.class);
                             PendingIntent pintent = PendingIntent.getService(context, 0, intent, 0);
                             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                            //  alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                            /// 6000, pintent);
+
 
                             Intent myIntent = new Intent(context, NotifyService.class);
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
                             PendingIntent pendingIntent = PendingIntent.getService(context, 0, myIntent, 0);
                             Calendar calendar = Calendar.getInstance();
-                            calendar.set(Calendar.SECOND, 0);
-                            calendar.set(Calendar.MINUTE, 27);
-                            calendar.set(Calendar.HOUR, 20);
-                            calendar.set(Calendar.AM_PM, Calendar.PM);
-
+//                            calendar.set(Calendar.SECOND, 0);
+//                            calendar.set(Calendar.MINUTE, 27);
+//                            calendar.set(Calendar.HOUR, 20);
+//                            calendar.set(Calendar.AM_PM, Calendar.PM);
+//
 
                             int hour = 0;
                             int min = 0;
+
                             String time = dataClass.getStart_time();
                             SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm:ss");
                             try {
                                 Date date = dateFormat2.parse(time);
                                 hour = date.getHours();
                                 min = date.getMinutes();
+                                Log.d("hour", String.valueOf(hour));
                                 Log.d("min", String.valueOf(min));
                             } catch (ParseException e) {
                             }
 
+                            int timeHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                            int minutwe = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                            int date2 = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                            int month2 = Calendar.getInstance().get(Calendar.MONTH);
+                            int yesar= Calendar.getInstance().get(Calendar.YEAR);
+                            Log.d("month2", String.valueOf(month2));
+                            Log.d("minute", String.valueOf(minutwe));
+                            Log.d("timeHour", String.valueOf(timeHour));
+                            Calendar call = Calendar.getInstance();
+
+                            call.set(yesar, month2, date2, hour, min, 0);
+                            setAlarm(call);
+
+
                             holder.imageView.setBackgroundResource(R.drawable.ic_access_alarm);
 
-                            forday(cal, Integer.parseInt(dataClass.getDay()), pendingIntent, 11, 00, dataClass.getUnit_name());
+                            forday(time,cal, Integer.parseInt(dataClass.getDay()), pendingIntent, hour, min, dataClass.getUnit_name());
 
 
                         }
@@ -243,11 +266,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         holder.unit_name.setText(dataClass.getUnit_name());
         holder.startTime.setText(dataClass.getStart_time());
         holder.room_number.setText(dataClass.getRoomnumber());
-
-
-//        SharedPreferences.Editor editor = pref.edit();
-//        editor.putString("alarms","[]");
-//        editor.commit();
 
 
 
@@ -375,7 +393,7 @@ LinearLayout linear_layout;
     }
 
 
-    public void forday(Calendar calSet, int day, PendingIntent pendingIntent, int hour, int minute, String unit_name )
+    public void forday(final String time , Calendar calSet, int day, PendingIntent pendingIntent, int hour, int minute, String unit_name )
     {
 
         String alarms= pref.getString("alarms", "[]");
@@ -386,6 +404,7 @@ LinearLayout linear_layout;
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("alarm_id",String.valueOf(System.currentTimeMillis()));
             jsonObject.put("unit_name",unit_name);
+            jsonObject.put("time",time);
             jsonObject.put("hour",hour);
             jsonObject.put("day",day);
             jsonObject.put("minute",minute);
@@ -393,23 +412,43 @@ LinearLayout linear_layout;
             SharedPreferences.Editor editor = pref.edit();
             editor.putString("alarms",String.valueOf(jsonArray));
             editor.commit();
+
+            Log.d("alarms", String.valueOf(jsonArray));
             
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-       
 
-        calSet.set(Calendar.DAY_OF_WEEK, day);
-        calSet.set(Calendar.HOUR_OF_DAY, hour);
-        calSet.set(Calendar.MINUTE, minute);
-        calSet.set(Calendar.SECOND, 0);
-        calSet.set(Calendar.MILLISECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-                calSet.getTimeInMillis(), 1 * 60 * 60 * 1000, pendingIntent);
+
+//        Calendar cal = Calendar.getInstance();
+//        cal.set(2016, 0, 23, 18, 5, 0);
+//         int timeHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+//
+//        //setAlarm(cal);
+//
+//        calSet.set(Calendar.HOUR_OF_DAY, 16);
+//        calSet.set(Calendar.MINUTE, minute);
+//        calSet.set(Calendar.SECOND, 45);
+//        calSet.set(Calendar.MILLISECOND, 0);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+//                calSet.getTimeInMillis(), 1 * 60 * 60 * 1000, pendingIntent);
         Toast.makeText(context, "Reminder set", Toast.LENGTH_SHORT).show();
     }
 
+
+
+    private void setAlarm(Calendar target)
+    {
+
+
+
+        Log.d("alarmdata","alarm set");
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, target.getTimeInMillis(), pendingIntent);
+    }
 
 
 }
