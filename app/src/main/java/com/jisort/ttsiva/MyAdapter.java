@@ -237,6 +237,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                             Log.d("timeHour", String.valueOf(timeHour));
                             Calendar call = Calendar.getInstance();
 
+                            if(min >= 30)
+                            {
+                                min = min - 30;
+                            }
+                            else
+                                {
+                                    hour = hour -1;
+                                    int rem = 60 - min;
+                                    min = rem - min;
+
+                                }
+
                             call.set(yesar, month2, date2, hour, min, 0);
                             setAlarm(call);
 
