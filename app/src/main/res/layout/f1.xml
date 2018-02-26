@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+
+
+
+
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:entries="@array/array_name"
+        android:layout_above="@+id/spinner3"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true" />
+        android:layout_margin="5dp" />
 
-    <Button
-        android:id="@+id/button"
-        style="@android:style/Widget.DeviceDefault.Button"
-        android:layout_width="wrap_content"
-        android:textColor="#ffff"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_margin="10dp"
-        android:text="Save and Continue..." />
+
+
 
     <Spinner
         android:id="@+id/spinner3"
@@ -28,5 +28,47 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/spinner"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="19dp" />
-</RelativeLayout>
+        android:layout_margin="5dp" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true" />
+
+
+
+
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:foregroundGravity="center"
+        android:hint="Lecturer ID"
+        android:inputType="textPersonName"
+        />
+
+
+
+    <Button
+        android:id="@+id/button"
+        style="@android:style/Widget.DeviceDefault.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+android:layout_gravity="center"
+
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Save and Continue..."
+        android:textColor="#ffff" />
+</LinearLayout>

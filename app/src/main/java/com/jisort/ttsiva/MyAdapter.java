@@ -118,6 +118,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                         if(unit_name.equals(dataClass.getUnit_name())&& day.equals(dataClass.getDay()))
                         {
                             isset=true;
+
+                            Log.d("TAG_unit_name ->", unit_name);
+                            Log.d("TAG_day ->", day);
                         }
 
 
@@ -376,8 +379,6 @@ LinearLayout linear_layout;
     {
 
         String alarms= pref.getString("alarms", "[]");
-
-
         try 
         
         {

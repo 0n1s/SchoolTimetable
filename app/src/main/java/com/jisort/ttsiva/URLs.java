@@ -5,6 +5,6 @@ package com.jisort.ttsiva;
  */
 
 public class URLs {
-    public static String main_url="http://192.168.43.245/main_tt/android/";
+    public static String main_url="https://schooltimetable.000webhostapp.com/android/";
     public static String timetable_data="";
 }

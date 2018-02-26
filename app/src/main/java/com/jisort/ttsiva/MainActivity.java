@@ -52,6 +52,8 @@ import java.util.Map;
 
 import static com.jisort.ttsiva.InitialActivity.batch_name;
 import static com.jisort.ttsiva.InitialActivity.dept;
+import static com.jisort.ttsiva.InitialActivity.islec;
+import static com.jisort.ttsiva.InitialActivity.lecturer_id;
 import static com.jisort.ttsiva.URLs.timetable_data;
 
 public class MainActivity extends AppCompatActivity
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if(islec)
+        {
+            getSupportActionBar().setSubtitle("For "+lecturer_id);
+        }
+        else
         getSupportActionBar().setSubtitle("For "+batch_name + " department code " + dept );
         //get json file from assets folder
 
@@ -174,6 +181,8 @@ $dept= 'CS101';
 
         }
     }
+
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter
     {
 

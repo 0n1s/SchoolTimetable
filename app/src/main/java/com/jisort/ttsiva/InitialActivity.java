@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -31,7 +32,9 @@ import static com.jisort.ttsiva.URLs.main_url;
 import static com.jisort.ttsiva.URLs.timetable_data;
 
 public class InitialActivity extends AppCompatActivity {
-    public static String  batch_name, dept;
+    public static String  batch_name, dept, lecturer_id;
+   public static Boolean islec = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +54,46 @@ public class InitialActivity extends AppCompatActivity {
 
 
     public static class MainMenu extends Fragment {
-        Spinner spinner3, spinner;
+        Spinner spinner3, spinner, selector;
         Button button;
+        EditText editText;
 
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
             ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.f1, container, false);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("E-timetable setup");
+
+            selector = rootView.findViewById(R.id.spinner2);
+            editText=rootView.findViewById(R.id.editText);
+            selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    switch (position){
+                        case 1:
+                            spinner.setVisibility(View.GONE);
+                            spinner3.setVisibility(View.GONE);
+                            editText.setVisibility(View.VISIBLE);
+                            islec = true;
+                            break;
+
+                        case 0:
+                            fetch_depts();
+                            editText.setVisibility(View.GONE);
+                            spinner.setVisibility(View.VISIBLE);
+                            spinner3.setVisibility(View.VISIBLE);
+                            islec = false;
+                            break;
+                    }
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             spinner = (Spinner) rootView.findViewById(R.id.spinner);
             spinner3 = (Spinner) rootView.findViewById(R.id.spinner3);
@@ -67,6 +103,8 @@ public class InitialActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v)
                 {
+                    lecturer_id = editText.getText().toString();
+
                     Fragment fragment = new Menu2();
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
@@ -77,7 +115,7 @@ public class InitialActivity extends AppCompatActivity {
 
                 }
             });
-            fetch_depts();
+
             return rootView;
 
         }
@@ -261,7 +299,14 @@ public class InitialActivity extends AppCompatActivity {
             button3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fetch_timetable( batch_name, dept);
+
+                    if(islec)
+                    {
+                        fetch_timetable_lec(lecturer_id);
+
+                    }
+                    else
+                        fetch_timetable( batch_name, dept);
                 }
             });
             return rootView;
@@ -304,6 +349,64 @@ public class InitialActivity extends AppCompatActivity {
                     super.onPostExecute(s);
 
                    // new AlertDialog.Builder(getActivity()).setMessage(s).show();
+                    progressDialog.dismiss();
+                    timetable_data=s;
+                    Log.d("timetable_data",timetable_data);
+
+                    if(!timetable_data.equals("")||timetable_data.length()<3)
+                    {
+                        startActivity(new Intent(getActivity(), MainActivity.class));
+                    }
+                    else {
+
+                        new AlertDialog.Builder(getActivity()).setMessage("Invalid timetable").setPositiveButton("Cancel", null).show().setTitle("Error!");
+                    }
+
+                }
+
+            }
+            GetJSON jj =new GetJSON();
+            jj.execute();
+
+
+        }
+
+
+
+
+        public void fetch_timetable_lec(final String lec_id)
+        {
+
+
+            class GetJSON extends AsyncTask<Void, Void, String> {
+
+                ProgressDialog progressDialog = new ProgressDialog(getActivity());
+
+                @Override
+                protected void onPreExecute()
+                {
+                    super.onPreExecute();
+
+                    progressDialog.setMessage("Fetching timetable.");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+                }
+                @Override
+                protected String doInBackground(Void... params)
+                {
+                    RequestHandler rh = new RequestHandler();
+                    HashMap<String, String> employees = new HashMap<>();
+                    employees.put("staff_id", lec_id);
+                    String res=rh.sendPostRequest(main_url+"lec.php",employees);
+                    return res;
+
+                }
+                @Override
+                protected void onPostExecute(String s)
+                {
+                    super.onPostExecute(s);
+
+                    // new AlertDialog.Builder(getActivity()).setMessage(s).show();
                     progressDialog.dismiss();
                     timetable_data=s;
                     Log.d("timetable_data",timetable_data);
